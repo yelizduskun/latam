@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Market Analysis — Argentina & Brazil</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green:       #0F7A5A;
+    --green-light: #E6F5F0;
+    --green-mid:   #1A9E74;
+    --blue:        #1056A0;
+    --blue-light:  #E6EEF9;
+    --blue-mid:    #1E72CC;
+    --gold:        #B5780A;
+    --gold-light:  #FEF3DC;
+    --coral:       #C03B1C;
+    --coral-light: #FDEEE9;
+    --gray-100:    #F5F5F5;
+    --gray-200:    #E8E8E8;
+    --gray-400:    #9A9A9A;
+    --gray-700:    #444444;
+    --black:       #1A1A1A;
+    --white:       #FFFFFF;
+  }
+
+  html { font-family: 'DM Sans', sans-serif; font-size: 18px; scroll-behavior: smooth; }
+  body { background: #F0EFE9; color: var(--black); overflow-x: hidden; }
+
+  /* ── NAV ─────────────────────────────────────── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: var(--white); border-bottom: 2px solid var(--gray-200);
+    padding: 14px 48px; display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  }
+  .nav-brand { font-family: 'Playfair Display', serif; font-size: 17px; color: var(--black); font-weight: 700; }
+  .nav-links { display: flex; gap: 8px; flex-wrap: wrap; }
+  .nav-links button {
+    background: none; border: 2px solid var(--gray-200); color: var(--gray-700);
+    padding: 6px 18px; border-radius: 24px; font-size: 14px; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-weight: 500; transition: all 0.2s;
+  }
+  .nav-links button:hover { border-color: var(--black); color: var(--black); }
+  .nav-links button.active { background: var(--black); border-color: var(--black); color: var(--white); font-weight: 600; }
+
+  .progress { position: fixed; bottom: 0; left: 0; height: 3px; background: var(--gold); transition: width 0.3s; z-index: 200; }
+
+  /* ── SLIDES ──────────────────────────────────── */
+  .slide { min-height: 100vh; display: flex; flex-direction: column; padding: 90px 0 64px; }
+
+  /* ── SLIDE 1: TITLE ──────────────────────────── */
+  #slide-title {
+    background: var(--white);
+    justify-content: center; align-items: center; text-align: center;
+  }
+  .title-eyebrow { font-size: 14px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; font-weight: 600; }
+  .title-main { font-family: 'Playfair Display', serif; font-size: clamp(56px, 7vw, 96px); font-weight: 700; line-height: 1; color: var(--black); margin-bottom: 12px; }
+  .title-sub { font-family: 'Playfair Display', serif; font-size: clamp(26px, 3.5vw, 44px); font-weight: 400; color: var(--gray-700); margin-bottom: 32px; }
+  .title-meta { font-size: 15px; color: var(--gray-400); letter-spacing: 0.06em; }
+  .title-line { width: 64px; height: 3px; background: var(--gold); margin: 24px auto; }
+  .scroll-cta {
+    margin-top: 56px; font-size: 13px; color: var(--gray-400);
+    letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+  }
+  .scroll-arrow { width: 22px; height: 22px; border-right: 2px solid var(--gray-400); border-bottom: 2px solid var(--gray-400); transform: rotate(45deg); animation: bob 1.6s ease-in-out infinite; }
+  @keyframes bob { 0%,100%{ transform: rotate(45deg) translateY(0); } 50%{ transform: rotate(45deg) translateY(6px); } }
+
+  /* ── SECTION HEADERS ─────────────────────────── */
+  .section-header {
+    padding: 0 60px 36px;
+    display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+  }
+  .section-label { font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 8px; font-weight: 600; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: clamp(36px, 4.5vw, 60px); font-weight: 700; line-height: 1.05; color: var(--black); }
+  .section-badge {
+    font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 8px 20px; border-radius: 24px; font-weight: 600; white-space: nowrap;
+  }
+
+  /* ── COUNTRY GRID ────────────────────────────── */
+  #slide-brazil    { background: #F7FDFB; }
+  #slide-argentina { background: #F5F8FD; }
+
+  .country-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    flex: 1; margin: 0 60px; border-radius: 14px; overflow: hidden;
+    border: 2px solid var(--gray-200); background: var(--gray-200);
+  }
+  .country-panel { background: var(--white); padding: 36px 32px; }
+  .country-panel.full-width { grid-column: 1 / -1; }
+  .inner-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+
+  .panel-label { font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 18px; font-weight: 600; }
+  .panel-title  { font-size: 16px; font-weight: 600; margin-bottom: 14px; }
+
+  /* Stats */
+  .stats-row { display: flex; gap: 20px; flex-wrap: wrap; }
+  .stat-box { flex: 1; min-width: 90px; }
+  .stat-num   { font-family: 'Playfair Display', serif; font-size: 38px; font-weight: 700; line-height: 1; }
+  .stat-label { font-size: 13px; color: var(--gray-700); margin-top: 5px; line-height: 1.4; }
+
+  /* Tags */
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+  .tag { font-size: 13px; padding: 5px 14px; border-radius: 20px; font-weight: 500; }
+  .tag-default { background: var(--gray-100); color: var(--gray-700); border: 1.5px solid var(--gray-200); }
+  .tag-green  { background: var(--green-light); color: var(--green); border: 1.5px solid #A8DDD1; }
+  .tag-blue   { background: var(--blue-light);  color: var(--blue);  border: 1.5px solid #A8C8EE; }
+  .tag-gold   { background: var(--gold-light);  color: var(--gold);  border: 1.5px solid #EED49A; }
+  .tag-coral  { background: var(--coral-light); color: var(--coral); border: 1.5px solid #EDB8A8; }
+
+  /* Highlight box */
+  .highlight-box { border-radius: 8px; padding: 16px 20px; margin-top: 18px; }
+  .highlight-box p { font-size: 15px; line-height: 1.6; color: var(--black); }
+  .highlight-box strong { font-weight: 700; }
+
+  /* Bullet list */
+  .bullet-list { list-style: none; }
+  .bullet-list li { padding: 9px 0; font-size: 15px; line-height: 1.55; color: var(--black); display: flex; gap: 12px; border-bottom: 1px solid var(--gray-200); }
+  .bullet-list li:last-child { border-bottom: none; }
+  .bullet-list li::before { content: '—'; font-weight: 700; flex-shrink: 0; }
+
+  /* ── COMPARISON SLIDE ────────────────────────── */
+  #slide-compare { background: var(--white); }
+
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 0 60px; flex: 1; }
+  .compare-card { border-radius: 14px; overflow: hidden; border: 2px solid var(--gray-200); }
+  .compare-card-header { padding: 22px 28px; display: flex; align-items: center; justify-content: space-between; }
+  .compare-card-header .country-name { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 700; }
+  .compare-card-body { padding: 0 28px 28px; }
+
+  .metric-row { display: flex; justify-content: space-between; align-items: baseline; padding: 13px 0; border-bottom: 1px solid var(--gray-200); }
+  .metric-row:last-child { border-bottom: none; }
+  .metric-key { font-size: 14px; color: var(--gray-700); }
+  .metric-val { font-size: 16px; font-weight: 600; color: var(--black); }
+
+  .recommend-banner { margin-top: 20px; border-radius: 10px; padding: 16px 20px; }
+  .recommend-banner .rb-label { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 700; margin-bottom: 7px; }
+  .recommend-banner .rb-text  { font-size: 15px; line-height: 1.6; color: var(--black); }
+
+  /* ── RECS SLIDE ───────────────────────────────── */
+  #slide-recs { background: var(--gray-100); }
+
+  .recs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 0 60px; flex: 1; }
+  .rec-card { border-radius: 14px; border: 2px solid var(--gray-200); background: var(--white); padding: 36px; display: flex; flex-direction: column; }
+  .rec-card .rc-flag  { font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 12px; font-weight: 700; }
+  .rec-card .rc-route { font-family: 'Playfair Display', serif; font-size: 22px; margin-bottom: 14px; color: var(--black); font-weight: 700; }
+  .rec-card .rc-desc  { font-size: 15px; color: var(--gray-700); line-height: 1.65; margin-bottom: 22px; flex: 1; }
+  .rec-card .rc-areas { display: flex; flex-wrap: wrap; gap: 8px; }
+  .rc-area { font-size: 13px; padding: 6px 14px; border-radius: 20px; font-weight: 600; }
+
+  .insight-card { grid-column: 1 / -1; border-radius: 14px; border: 2px solid #EED49A; background: var(--gold-light); padding: 36px; }
+  .insight-card .ic-label { font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); font-weight: 700; margin-bottom: 14px; }
+  .insight-card .ic-text  { font-family: 'Playfair Display', serif; font-size: clamp(17px, 2vw, 22px); line-height: 1.55; color: var(--black); }
+
+  /* ── RESPONSIVE ───────────────────────────────── */
+  @media (max-width: 900px) {
+    nav { padding: 12px 20px; }
+    .nav-brand { display: none; }
+    .section-header { padding: 0 24px 24px; flex-direction: column; align-items: flex-start; }
+    .country-grid, .compare-grid, .recs-grid { margin: 0 20px; grid-template-columns: 1fr; }
+    .inner-grid { grid-template-columns: 1fr; }
+    .country-panel.full-width { grid-column: 1; }
+    .slide { padding: 80px 0 40px; }
+    .stat-num { font-size: 30px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-brand">Market Analysis 2026</span>
+  <div class="nav-links">
+    <button onclick="goTo('slide-title')">Overview</button>
+    <button onclick="goTo('slide-brazil')">Brazil</button>
+    <button onclick="goTo('slide-argentina')">Argentina</button>
+    <button onclick="goTo('slide-compare')">Comparison</button>
+    <button onclick="goTo('slide-recs')">Recommendations</button>
+  </div>
+</nav>
+<div class="progress" id="progress"></div>
+
+<!-- ══ SLIDE 1: TITLE ══ -->
+<section class="slide" id="slide-title">
+  <p class="title-eyebrow">Strategic Market Intelligence</p>
+  <h1 class="title-main">Market Analysis</h1>
+  <p class="title-sub">Argentina &amp; Brazil</p>
+  <div class="title-line"></div>
+  <p class="title-meta">Higher Education Market Entry · April 2026</p>
+  <div class="scroll-cta" onclick="goTo('slide-brazil')">
+    <span>Explore</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- ══ SLIDE 2: BRAZIL ══ -->
+<section class="slide" id="slide-brazil">
+  <div class="section-header">
+    <div>
+      <p class="section-label" style="color:var(--green);">Country Profile — Slide 3</p>
+      <h2 class="section-title">Brazil</h2>
+    </div>
+    <span class="section-badge" style="background:var(--green-light); color:var(--green); border:2px solid #A8DDD1;">Largest LATAM Economy</span>
+  </div>
+
+  <div class="country-grid">
+    <div class="country-panel">
+      <p class="panel-label" style="color:var(--green);">Demographics</p>
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="stat-num" style="color:var(--green);">213M</div>
+          <div class="stat-label">Total population<br>(7th worldwide)</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" style="color:var(--gold);">15.1M</div>
+          <div class="stat-label">Youth 15–19<br>years old</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" style="color:var(--coral);">25%</div>
+          <div class="stat-label">NEET rate<br>(vs. OECD 14%)</div>
+        </div>
+      </div>
+      <div class="highlight-box" style="background:var(--gold-light); border:1.5px solid #EED49A;">
+        <p>HE attainment: <strong>21.5%</strong> of adults 25–64 hold a higher education degree — well below EU (37%), OECD (41%), USA (51%).</p>
+      </div>
+    </div>
+
+    <div class="country-panel" style="border-left:2px solid var(--gray-200);">
+      <p class="panel-label" style="color:var(--green);">Higher Education System</p>
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="stat-num" style="color:var(--green);">10.5M</div>
+          <div class="stat-label">HE students<br>enrolled</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" style="color:var(--gold);">80%</div>
+          <div class="stat-label">Enrolled in<br>private HEIs</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" style="color:var(--coral);">2,561</div>
+          <div class="stat-label">HE institutions<br>(206 universities)</div>
+        </div>
+      </div>
+      <div class="tag-row">
+        <span class="tag tag-green">2.7% annual growth</span>
+        <span class="tag tag-gold">73% of private = online</span>
+        <span class="tag tag-coral">2 in QS top 300</span>
+        <span class="tag tag-default">50%+ undergrad online</span>
+      </div>
+    </div>
+
+    <div class="country-panel" style="border-top:2px solid var(--gray-200);">
+      <p class="panel-label" style="color:var(--green);">Market Characteristics</p>
+      <ul class="bullet-list">
+        <li><span>Massive privately-driven system — 80% private enrollment</span></li>
+        <li><span>Online boom: 73% of private enrolments; 50% of all undergrad now online</span></li>
+        <li><span>Annual tuition: ~$1K online; $10–20K on-campus premium</span></li>
+        <li><span>2025 regulation: new face-to-face requirements signal end of online expansion cycle</span></li>
+        <li><span>Locally accredited degrees strongly preferred by employers</span></li>
+        <li><span>Mostly outbound student mobility; very limited international intake</span></li>
+      </ul>
+    </div>
+
+    <div class="country-panel" style="border-top:2px solid var(--gray-200); border-left:2px solid var(--gray-200);">
+      <p class="panel-label" style="color:var(--coral);">Political &amp; Economic Context</p>
+      <ul class="bullet-list">
+        <li><span><strong>2026 election year</strong> — October; Lula vs. Flávio Bolsonaro</span></li>
+        <li><span>GDP per capita $10,310 — below world avg. ($13.6K) and OECD ($48K)</span></li>
+        <li><span>Currency volatile; interest rates ~15%; moderate inflation</span></li>
+        <li><span>High income inequality limits demand for premium programs</span></li>
+        <li><span>No foreign branch campus regime — full local incorporation required</span></li>
+        <li><span>MEC + INEP accreditation: 1.5–3 years typical timeline</span></li>
+      </ul>
+    </div>
+
+    <div class="country-panel full-width" style="background:var(--gray-100); border-top:2px solid var(--gray-200);">
+      <p class="panel-label" style="color:var(--green);">Pipeline &amp; Adjacent Markets</p>
+      <div class="inner-grid">
+        <div>
+          <p class="panel-title" style="color:var(--green);">K-12 Pipeline</p>
+          <ul class="bullet-list" style="font-size:14px;">
+            <li><span>8M high school students (13% private)</span></li>
+            <li><span>85 international schools; 3 German schools</span></li>
+            <li><span>Elite private school: ~$40K/year</span></li>
+            <li><span>Competitive Vestibular entrance exam</span></li>
+          </ul>
+        </div>
+        <div>
+          <p class="panel-title" style="color:var(--green);">Bootcamp Ecosystem</p>
+          <ul class="bullet-list" style="font-size:14px;">
+            <li><span>Alura: largest tech platform, 70K+ students</span></li>
+            <li><span>EBAC, Trybe, Rocketseat growing fast</span></li>
+            <li><span>Global players: Le Wagon, Ironhack present</span></li>
+            <li><span>Expanding across all tech segments</span></li>
+          </ul>
+        </div>
+        <div>
+          <p class="panel-title" style="color:var(--green);">Research Strengths</p>
+          <ul class="bullet-list" style="font-size:14px;">
+            <li><span>USP &amp; UNICAMP: top LATAM research universities</span></li>
+            <li><span>Strong AI, ML, cybersecurity research base</span></li>
+            <li><span>Most top researchers at public universities</span></li>
+            <li><span>Private sector mainly teaching-oriented</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SLIDE 3: ARGENTINA ══ -->
+<section class="slide" id="slide-argentina">
+  <div class="section-header">
+    <div>
+      <p class="section-label" style="color:var(--blue);">Country Profile — Slide 4</p>
+      <h2 class="section-title">Argentina</h2>
+    </div>
+    <span class="section-badge" style="background:var(--blue-light); color:var(--blue); border:2px solid #A8C8EE;">Public-Dominated System</span>
+  </div>
+
+  <div class="country-grid">
+    <div class="country-panel">
+      <p class="panel-label" style="color:var(--blue);">Demographics</p>
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="stat-num" style="color:var(--blue);">46M</div>
+          <div class="stat-label">Total population</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" style="color:var(--gold);">3.6M</div>
+          <div class="stat-label">Youth 15–19<br>years old</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" style="color:var(--coral);">16%</div>
+          <div class="stat-label">NEET rate<br>(vs. OECD 14%)</div>
+        </div>
+      </div>
+      <div class="highlight-box" style="background:var(--blue-light); border:1.5px solid #A8C8EE;">
+        <p>HE attainment: <strong>19%</strong> of adults 25–64. Tertiary graduates earn <strong>63% more</strong>, exceeding the OECD earnings premium of 54%.</p>
+      </div>
+    </div>
+
+    <div class="country-panel" style="border-left:2px solid var(--gray-200);">
+      <p class="panel-label" style="color:var(--blue);">Higher Education System</p>
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="stat-num" style="color:var(--blue);">2.75M</div>
+          <div class="stat-label">Total HE students<br>enrolled</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" style="color:var(--gold);">78%</div>
+          <div class="stat-label">Enrolled in<br>public HEIs</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" style="color:var(--coral);">142</div>
+          <div class="stat-label">HE institutions<br>(120 universities)</div>
+        </div>
+      </div>
+      <div class="tag-row">
+        <span class="tag tag-blue">40% growth in 10 years</span>
+        <span class="tag tag-default">Free public tuition</span>
+        <span class="tag tag-gold">Only 9% online delivery</span>
+        <span class="tag tag-coral">No university in top 1,200</span>
+      </div>
+    </div>
+
+    <div class="country-panel" style="border-top:2px solid var(--gray-200);">
+      <p class="panel-label" style="color:var(--blue);">Market Characteristics</p>
+      <ul class="bullet-list">
+        <li><span>Heavily public-dominated; tuition-free, open-access public universities</span></li>
+        <li><span>Private sector small (22%) but concentrated in urban areas</span></li>
+        <li><span>Private tuition: $4–9K (mid range), $9–15K (high range)</span></li>
+        <li><span>Online penetration far below Brazil — only 9% of programs</span></li>
+        <li><span>Top LATAM destination: hosts 40% of all regional international students</span></li>
+        <li><span>Low completion rates despite high participation (76%)</span></li>
+      </ul>
+    </div>
+
+    <div class="country-panel" style="border-top:2px solid var(--gray-200); border-left:2px solid var(--gray-200);">
+      <p class="panel-label" style="color:var(--coral);">Political &amp; Economic Context</p>
+      <ul class="bullet-list">
+        <li><span><strong>President Milei (since 2023)</strong> — radical reforms; deep cuts to public universities</span></li>
+        <li><span>Very high inflation (declining); severe currency instability</span></li>
+        <li><span>"Cryptogate" — $LIBRA collapse: $250M losses, eroded trust in government</span></li>
+        <li><span>From July 2025: public universities may charge fees to foreign students</span></li>
+        <li><span>Significant scepticism toward foreign &amp; private investment</span></li>
+        <li><span>CONEAU approval required — 12–24 months timeline</span></li>
+      </ul>
+    </div>
+
+    <div class="country-panel full-width" style="background:var(--gray-100); border-top:2px solid var(--gray-200);">
+      <p class="panel-label" style="color:var(--blue);">Pipeline &amp; Adjacent Markets</p>
+      <div class="inner-grid">
+        <div>
+          <p class="panel-title" style="color:var(--blue);">K-12 Pipeline</p>
+          <ul class="bullet-list" style="font-size:14px;">
+            <li><span>4M high school students (29% private)</span></li>
+            <li><span>56 international schools; 4 German schools</span></li>
+            <li><span>Elite private school: ~$34K/year</span></li>
+            <li><span>No national university entrance exam</span></li>
+          </ul>
+        </div>
+        <div>
+          <p class="panel-title" style="color:var(--blue);">Bootcamp Ecosystem</p>
+          <ul class="bullet-list" style="font-size:14px;">
+            <li><span>Domestic providers: $1–4K per tech program</span></li>
+            <li><span>Henry, Coderhouse, Digital House growing</span></li>
+            <li><span>Global entrants: Le Wagon, 4Geeks Academy</span></li>
+            <li><span>Regional anchor for Spanish-speaking market</span></li>
+          </ul>
+        </div>
+        <div>
+          <p class="panel-title" style="color:var(--blue);">Research Strengths</p>
+          <ul class="bullet-list" style="font-size:14px;">
+            <li><span>UBA: major AI/ML, quantum physics research</span></li>
+            <li><span>ITBA: applied tech and cybersecurity leader</span></li>
+            <li><span>Most high-impact researchers now abroad</span></li>
+            <li><span>~0.6% GDP invested in R&amp;D (very low)</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SLIDE 4: COMPARISON ══ -->
+<section class="slide" id="slide-compare">
+  <div class="section-header">
+    <div>
+      <p class="section-label" style="color:var(--gold);">Head-to-Head</p>
+      <h2 class="section-title">Market Comparison</h2>
+    </div>
+  </div>
+
+  <div class="compare-grid">
+    <div class="compare-card">
+      <div class="compare-card-header" style="background:var(--green-light); border-bottom:2px solid #A8DDD1;">
+        <span class="country-name" style="color:var(--green);">Brazil</span>
+        <span class="tag tag-green" style="font-size:14px;">High Volume</span>
+      </div>
+      <div class="compare-card-body">
+        <div class="metric-row"><span class="metric-key">Total HE students</span><span class="metric-val">10.5 million</span></div>
+        <div class="metric-row"><span class="metric-key">Private sector share</span><span class="metric-val">80%</span></div>
+        <div class="metric-row"><span class="metric-key">Online enrollment share</span><span class="metric-val">50%+ of undergrad</span></div>
+        <div class="metric-row"><span class="metric-key">Online tuition (avg)</span><span class="metric-val">~$1,000/year</span></div>
+        <div class="metric-row"><span class="metric-key">No. of HE institutions</span><span class="metric-val">2,561</span></div>
+        <div class="metric-row"><span class="metric-key">GDP per capita</span><span class="metric-val">$10,310</span></div>
+        <div class="metric-row"><span class="metric-key">Market entry timeline</span><span class="metric-val">3–6 months (CPD)</span></div>
+        <div class="metric-row"><span class="metric-key">Regulatory complexity</span><span class="metric-val" style="color:var(--coral);">High</span></div>
+        <div class="metric-row"><span class="metric-key">Key political risk</span><span class="metric-val">2026 election</span></div>
+        <div class="recommend-banner" style="background:var(--green-light); border:1.5px solid #A8DDD1;">
+          <p class="rb-label" style="color:var(--green);">Recommended entry</p>
+          <p class="rb-text">Non-Accredited CPD Route — tech-focused postgraduate programs under a Brazilian entity, maintaining foreign academic control.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="compare-card">
+      <div class="compare-card-header" style="background:var(--blue-light); border-bottom:2px solid #A8C8EE;">
+        <span class="country-name" style="color:var(--blue);">Argentina</span>
+        <span class="tag tag-blue" style="font-size:14px;">Partnership Opportunity</span>
+      </div>
+      <div class="compare-card-body">
+        <div class="metric-row"><span class="metric-key">Total HE students</span><span class="metric-val">2.75 million</span></div>
+        <div class="metric-row"><span class="metric-key">Private sector share</span><span class="metric-val">22%</span></div>
+        <div class="metric-row"><span class="metric-key">Online enrollment share</span><span class="metric-val">~10% of undergrad</span></div>
+        <div class="metric-row"><span class="metric-key">Private tuition (mid range)</span><span class="metric-val">$4,000–9,000/year</span></div>
+        <div class="metric-row"><span class="metric-key">No. of HE institutions</span><span class="metric-val">142</span></div>
+        <div class="metric-row"><span class="metric-key">GDP per capita</span><span class="metric-val">~$13,000 (volatile)</span></div>
+        <div class="metric-row"><span class="metric-key">Market entry timeline</span><span class="metric-val">6–12 months (partner)</span></div>
+        <div class="metric-row"><span class="metric-key">Regulatory complexity</span><span class="metric-val" style="color:var(--gold);">Moderate</span></div>
+        <div class="metric-row"><span class="metric-key">Key political risk</span><span class="metric-val">Milei austerity cuts</span></div>
+        <div class="recommend-banner" style="background:var(--blue-light); border:1.5px solid #A8C8EE;">
+          <p class="rb-label" style="color:var(--blue);">Recommended entry</p>
+          <p class="rb-text">Local Accredited Partner — co-developed postgraduate programs with a private urban HEI; dual positioning: European quality + Argentine recognition.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SLIDE 5: RECOMMENDATIONS ══ -->
+<section class="slide" id="slide-recs">
+  <div class="section-header">
+    <div>
+      <p class="section-label" style="color:var(--gold);">Strategic Conclusions</p>
+      <h2 class="section-title">Recommendations</h2>
+    </div>
+  </div>
+
+  <div class="recs-grid">
+    <div class="rec-card" style="border-color:#A8DDD1;">
+      <p class="rc-flag" style="color:var(--green);">Brazil</p>
+      <h3 class="rc-route">Non-Accredited CPD Entry Route</h3>
+      <p class="rc-desc">Establish a Brazilian legal entity to offer tech-focused, non-degree professional programs. Maintain full academic control under foreign university standards. Build brand recognition before committing to MEC/INEP accreditation. Differentiate through English-medium programs targeting working professionals. Low capital exposure, fast to market (3–6 months), with clear escalation optionality.</p>
+      <div class="rc-areas">
+        <span class="rc-area" style="background:var(--green-light); color:var(--green); border:1.5px solid #A8DDD1;">Artificial Intelligence</span>
+        <span class="rc-area" style="background:var(--green-light); color:var(--green); border:1.5px solid #A8DDD1;">Cybersecurity</span>
+        <span class="rc-area" style="background:var(--green-light); color:var(--green); border:1.5px solid #A8DDD1;">Applied Data Science</span>
+        <span class="rc-area" style="background:var(--green-light); color:var(--green); border:1.5px solid #A8DDD1;">Executive Tech Programs</span>
+      </div>
+    </div>
+
+    <div class="rec-card" style="border-color:#A8C8EE;">
+      <p class="rc-flag" style="color:var(--blue);">Argentina</p>
+      <h3 class="rc-route">Local Accredited Partner Model</h3>
+      <p class="rc-desc">Partner with an existing private urban HEI to launch co-developed postgraduate programs. Target institutions open to dual positioning and revenue-share structures. Leverage European academic quality signalling with Argentine degree recognition. Focus on 1-year professional master's equivalents for working adults. Lower scale than Brazil, but stronger brand leverage and faster regulatory path.</p>
+      <div class="rc-areas">
+        <span class="rc-area" style="background:var(--blue-light); color:var(--blue); border:1.5px solid #A8C8EE;">AI &amp; Data Science</span>
+        <span class="rc-area" style="background:var(--blue-light); color:var(--blue); border:1.5px solid #A8C8EE;">Applied Tech</span>
+        <span class="rc-area" style="background:var(--blue-light); color:var(--blue); border:1.5px solid #A8C8EE;">Digital Business</span>
+        <span class="rc-area" style="background:var(--blue-light); color:var(--blue); border:1.5px solid #A8C8EE;">Cybersecurity</span>
+      </div>
+    </div>
+
+    <div class="insight-card">
+      <p class="ic-label">Key Insight</p>
+      <p class="ic-text">Brazil is a high-volume, low-price, high-complexity market best suited for controlled brand entry with minimal regulatory exposure. Argentina is a smaller but partnership-oriented market where academic positioning and dual-recognition programs can generate stronger brand leverage per student.</p>
+    </div>
+  </div>
+</section>
+
+<script>
+  function goTo(id) {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  }
+  const progressBar = document.getElementById('progress');
+  const navBtns = document.querySelectorAll('.nav-links button');
+  const slideIds = ['slide-title','slide-brazil','slide-argentina','slide-compare','slide-recs'];
+  window.addEventListener('scroll', () => {
+    const pct = Math.round(window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100);
+    progressBar.style.width = pct + '%';
+    let cur = slideIds[0];
+    slideIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && el.getBoundingClientRect().top <= 120) cur = id;
+    });
+    navBtns.forEach((btn, i) => btn.classList.toggle('active', slideIds[i] === cur));
+  });
+</script>
+</body>
+</html>
